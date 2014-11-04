@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是OrgMapper接口的路径” -->
+<mapper namespace="api.StudentMapper">
+    <sql id="StudentFields">
+        name,sex,major,grade, create_time, update_time
+    </sql>
+    <resultMap type="Student" id="stuResult">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="major" property="major" />
+        <result column="grade" property="grade" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!--
+    id必须和StudentMapper接口中的接口方法名相同
+    sql结尾不能加分号，否则报“ORA-00911”的错误
+    -->
+    <insert id="insertStudent" parameterType="Student" useGeneratedKeys='true' keyProperty='id'>
+        insert into student
+        (<include refid="StudentFields"/>)
+        values
+        (#{name},#{sex},#{major},#{grade},now(),now())
+    </insert>
+    <delete id="deleteStudent" parameterType="int">
+        delete from student where id = #{id}
+    </delete>
+    <update id="updateStudent" parameterType="Student">
+        update student set
+        name = #{name},
+        sex = #{sex},
+        major = #{major},
+        grade = #{grade},
+        update_time = now()
+        where id = #{id}
+    </update>
+    <select id="selectById" parameterType="int" resultMap="stuResult">
+        select * from student where id = #{id}
+    </select>
+    <select id="selectFemaleStudents" resultMap="stuResult">
+        select * from student where sex = 'f'
+    </select>
+</mapper>
