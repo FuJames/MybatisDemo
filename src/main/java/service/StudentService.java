@@ -1,12 +1,14 @@
 package service;
 
 import api.StudentMapper;
+import model.Course;
 import model.Student;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import util.MybatisUtil;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Author: qianzhong.fu @ DataYes
@@ -60,7 +62,7 @@ public class StudentService {
             sqlSession.close();
         }
     }
-    public List<Student> getFemaleStudents(){
+    public Set<Student> getFemaleStudents(){
         SqlSession sqlSession = factory.openSession();
         try{
             StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
@@ -69,4 +71,15 @@ public class StudentService {
             sqlSession.close();
         }
     }
+    public void saveStudentCourse(Student student,Course course){
+        SqlSession sqlSession = factory.openSession();
+        try{
+            StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
+            mapper.saveStudentCourse(student,course);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+    }
+
 }

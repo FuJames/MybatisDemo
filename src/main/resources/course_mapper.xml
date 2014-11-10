@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是Mapper接口的路径” -->
+<mapper namespace="api.CourseMapper">
+
+    <resultMap type="model.Course" id="simpleCourse">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="credit" property="credit" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <select id="selectCourseById" parameterType="int" resultMap="simpleCourse">
+        select * from course where id = #{id}
+    </select>
+    <select id="selectCourseByStudentId" parameterType="int" resultMap="simpleCourse">
+        <!--使用in子查询-->
+        select * from course c where c.id in
+        (select course_id from student_course
+         where student_id = #{id})
+        <!--使用inner join
+        select * from course inner join student_course
+        on course.id = student_course.course_id
+        where student_id = #{id}-->
+    </select>
+</mapper>

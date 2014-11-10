@@ -18,7 +18,16 @@ public class Student {
     private String grade;
     private Date createTime;
     private Date updateTime;
-    private Set<Course> courses;
+    private Supervisor supervisor;//一位学生对应一位导师
+    private Set<Course> courses;//一位学生可选多项课程
+
+    public Supervisor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
+    }
 
     public Set<Course> getCourses() {
         return courses;

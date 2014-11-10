@@ -2,15 +2,13 @@ package model;
 
 /**
  * Author: qianzhong.fu @ DataYes
- * Date: 2014/11/4
- * Time: 14:38
+ * Date: 2014/11/6
+ * Time: 10:36
  */
-public class Course {
+public class Supervisor {
     private int id;
     private String name;
-    private int credit;
-    private int type;
-
+    private String title;
     public int getId() {
         return id;
     }
@@ -27,19 +25,11 @@ public class Course {
         this.name = name;
     }
 
-    public int getCredit() {
-        return credit;
+    public String getTitle() {
+        return title;
     }
 
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

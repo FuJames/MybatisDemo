@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是Mapper接口的路径” -->
+<mapper namespace="api.StudentMapper">
+    <sql id="StudentFields">
+        name,sex,major,grade, create_time, update_time
+    </sql>
+    <resultMap type="Student" id="simpleStuResult">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="major" property="major" />
+        <result column="grade" property="grade" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <!--
+        column="supervisor_id"不能少。此列的值作为参数
+        传递给要引用的select语句，用来查询相应学生的指导教师
+        的信息。-->
+        <association property="supervisor" select="api.SupervisorMapper.selectSupervisorById" column="supervisor_id"></association>
+        <!--
+        多对多的关联查询，需要在course mapper中查询student与course的关联表
+        column="id"将student的id作为参数传递给select语句。注意：所有的column名来自于student表！
+        -->
+        <collection property="courses" ofType="model.Course" select="api.CourseMapper.selectCourseByStudentId" column="id"></collection>
+    </resultMap>
+    <!--extends表示继承已有的定义-->
+    <resultMap id="studentResultMap" type="Student" extends="simpleStuResult">
+        <collection property="courses" ofType="model.Course" select="api.CourseMapper.selectCourseByStudentId" column="student_id"></collection>
+    </resultMap>
+
+    <!--
+    id必须和StudentMapper接口中的接口方法名相同
+    sql结尾不能加分号，否则报“ORA-00911”的错误
+    -->
+    <insert id="insertStudent" parameterType="Student" useGeneratedKeys='true' keyProperty='id'>
+        insert into student
+        (<include refid="StudentFields"/>)
+        values
+        (#{name},#{sex},#{major},#{grade},now(),now())
+    </insert>
+    <!--多对多保存，向关联数据表中插入数据-->
+    <insert id="saveStudentCourse" useGeneratedKeys="true">
+        insert into student_course(student_id,course_id)
+        values (#{param1.id},#{param2.id})
+    </insert>
+    <delete id="deleteStudent" parameterType="int">
+        delete from student where id = #{id}
+    </delete>
+    <update id="updateStudent" parameterType="Student">
+        update student set
+        name = #{name},
+        sex = #{sex},
+        major = #{major},
+        grade = #{grade},
+        update_time = now()
+        where id = #{id}
+    </update>
+    <select id="selectById" parameterType="int" resultMap="simpleStuResult">
+        select * from student where id = #{id}
+    </select>
+    <select id="selectFemaleStudents" resultMap="simpleStuResult">
+        select * from student where sex = 'f'
+    </select>
+
+</mapper>

@@ -18,7 +18,7 @@ public class MybatisUtil {
     static {
         Reader reader = null;
         try{
-            reader = Resources.getResourceAsReader("mybatis-config.xml");
+            reader = Resources.getResourceAsReader("mybatis_config.xml");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

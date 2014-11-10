@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是Mapper接口的路径” -->
+<mapper namespace="api.SupervisorMapper">
+
+    <resultMap type="model.Supervisor" id="simpleSupervisor">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="title" property="title" />
+    </resultMap>
+    
+    <select id="selectSupervisorById" parameterType="int" resultMap="simpleSupervisor">
+        select * from supervisor where id = #{id}
+    </select>
+</mapper>
